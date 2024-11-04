@@ -14,11 +14,25 @@ def hash_password(password):
 
 def check_auth(username, password):
     """Verifica se as credenciais de usuário e senha são válidas."""
-    # Use a senha em texto simples temporariamente para depuração
-    print(f"Verificando usuário: {username} com senha: {password}")  # Debugging
-    filtro_ = {"usuario": username, "senha": password}  # Usar senha em texto simples
-    usuario = mongo.db.usuarios.find_one(filtro_)
-    return bool(usuario)
+    # Verifica se o usuário existe
+    user = mongo.db.usuarios.find_one({"usuario": username})
+    if not user:
+        print("Usuário não encontrado.")
+        return False
+
+    # Exibe o hash armazenado e o hash da senha fornecida
+    stored_password_hash = user['senha']
+    provided_password_hash = hash_password(password)
+    print(f"Hash armazenado: {stored_password_hash}")
+    print(f"Hash da senha fornecida: {provided_password_hash}")
+
+    # Verifica se os hashes coincidem
+    if verify_password(stored_password_hash, password):
+        print("Login bem-sucedido!")
+        return True
+    else:
+        print("Senha incorreta.")
+        return False
 
 def authenticate():
     """Envia uma resposta que solicita autenticação ao usuário.""" 
@@ -35,3 +49,8 @@ def requires_auth(f):
             return authenticate()
         return f(*args, **kwargs)
     return decorated
+
+# Verifica se a senha fornecida corresponde ao hash da senha armazenada
+def verify_password(stored_password_hash, provided_password):
+    provided_password_hash = hash_password(provided_password)
+    return stored_password_hash == provided_password_hash

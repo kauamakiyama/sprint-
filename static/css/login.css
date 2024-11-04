@@ -1,4 +1,4 @@
-/* Imagem de fundo para a página de cadastro */
+/* Imagem de fundo para a página de login */
 body {
     font-family: Arial, sans-serif;
     min-height: 100vh;
@@ -13,6 +13,7 @@ body {
     overflow: hidden;
 }
 
+/* Estilo da logo "EZTRAVEL" em branco, sem fundo */
 .main-header {
     position: absolute;
     top: 20px;
@@ -23,17 +24,25 @@ body {
     align-items: center;
 }
 
-/* Estilo da caixa de cadastro */
-.signup-overlay {
+.logo {
+    color: #ffffff;           /* Texto em branco */
+    font-size: 36px;          /* Aumenta o tamanho da fonte */
+    font-weight: bold;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+/* Estilo da caixa de login */
+.login-overlay {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     height: 100vh;
-    /* Remova o background-color para deixar o fundo transparente */
 }
 
-.signup-container {
+.login-container {
     background-color: #ffffff;
     color: #333333;
     padding: 40px;
@@ -44,24 +53,24 @@ body {
     text-align: left;
 }
 
-.signup-container h1 {
+.login-container h1 {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 20px;
     text-align: center;
 }
 
-.signup-container form {
+.login-container form {
     display: flex;
     flex-direction: column;
 }
 
-.signup-container label {
+.login-container label {
     font-size: 16px;
     margin-bottom: 5px;
 }
 
-.signup-container input {
+.login-container input {
     padding: 10px;
     font-size: 16px;
     margin-bottom: 15px;
@@ -69,7 +78,7 @@ body {
     border-radius: 5px;
 }
 
-.signup-container button {
+.login-container button {
     background-color: #5a60ef;
     color: #ffffff;
     border: none;
@@ -80,6 +89,23 @@ body {
     transition: background-color 0.3s ease;
 }
 
-.signup-container button:hover {
+.login-container button:hover {
     background-color: #3b41e0;
+}
+
+.login-container p {
+    font-size: 14px;
+    color: #333333;
+    margin-top: 15px;
+    text-align: center;
+}
+
+.login-container a {
+    color: #5a60ef;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.login-container a:hover {
+    color: #3b41e0;
 }

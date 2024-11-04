@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - EZTRAVEL</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body>
+    <header class="main-header">
+        <h1 class="logo">EZTRAVEL</h1>
+    </header>
+
+    <main class="login-container">
+        <h2>Login</h2>
+        <form action="{{ url_for('login') }}" method="POST">
+            <label for="usuario">Usuário</label>
+            <input type="text" id="usuario" name="usuario" required>
+
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" name="senha" required>
+
+            <button type="submit" class="login-button">Entrar</button>
+        </form>
+        <p>Não tem uma conta? <a href="{{ url_for('signin') }}">Cadastre-se</a></p>
+    </main>
+</body>
+</html>
