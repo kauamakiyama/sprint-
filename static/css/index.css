@@ -110,3 +110,13 @@ body {
 .cta-button:hover {
     background-color: #3b41e0;
 }
+
+.logo {
+    font-size: 36px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.logo-link {
+    text-decoration: none; 
+}

@@ -30,13 +30,13 @@ def create_user():
     email = request.form.get('email')
 
     if not usuario or not senha or not email:
-        return jsonify({"error": "Nome, usuário, senha e email são obrigatórios"}), 400
+        return render_template('signin.html', error="Nome, usuário, senha e email são obrigatórios"), 400
 
     if mongo.db.usuarios.find_one({"usuario": usuario}):
-        return jsonify({"error": "Usuário já existe"}), 409
+        return render_template('signin.html', error="Usuário já está sendo usado"), 409
 
     if mongo.db.usuarios.find_one({"email": email}):
-        return jsonify({"error": "E-mail já cadastrado"}), 409
+        return render_template('signin.html', error="E-mail já cadastrado"), 409
 
     hashed_password = hash_password(senha)
     user_data = {"usuario": usuario, "senha": hashed_password, "email": email}
@@ -52,6 +52,7 @@ def success():
 # Rota para a página de login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    error = None
     if request.method == 'POST':
         email = request.form.get('email')  # Mudamos de 'usuario' para 'email'
         senha = request.form.get('senha')
@@ -59,9 +60,10 @@ def login():
         if user and verify_password(user['senha'], senha):
             session['user'] = user['usuario']  # Armazena o usuário na sessão
             return redirect(url_for('profile')), 302
-        return jsonify({"error": "E-mail ou senha incorretos"}), 401
+        
+        error = "E-mail ou senha incorretos"
 
-    return render_template('login.html'), 200
+    return render_template('login.html', error=error), 200
 
 
 @app.route('/logout')
