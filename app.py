@@ -16,12 +16,12 @@ init_mongo(mongo)
 # Rota para a página principal
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('index.html') , 200
 
 # Rota para a página de cadastro
 @app.route('/signin')
 def signin():
-    return render_template('signin.html')
+    return render_template('signin.html') , 200
 
 # Rota para criar um novo usuário
 @app.route('/usuarios', methods=['POST'])
@@ -40,12 +40,12 @@ def create_user():
     user_data = {"nome": nome, "usuario": usuario, "senha": hashed_password}
     mongo.db.usuarios.insert_one(user_data)
 
-    return redirect(url_for('success'))
+    return redirect(url_for('success')) , 201
 
 # Rota de sucesso
 @app.route('/success')
 def success():
-    return render_template('sucesso.html')
+    return render_template('sucesso.html'), 200 
 
 # Rota para a página de login
 @app.route('/login', methods=['GET', 'POST'])
@@ -58,16 +58,16 @@ def login():
         if user and verify_password(user['senha'], senha):
             session['user'] = usuario  # Armazena o usuário na sessão
             session['username'] = user['nome']
-            return redirect(url_for('profile'))
+            return redirect(url_for('profile')) , 302
         return jsonify({"error": "Usuário ou senha incorretos"}), 401
 
-    return render_template('login.html')
+    return render_template('login.html'), 200
 
 @app.route('/logout')
 def logout():
     session.pop('username', None)  # Remove 'username' da sessão
     session.pop('user', None)       # Remove 'user' da sessão
-    return redirect(url_for('home'))
+    return redirect(url_for('home')) , 302
 
 
 # Rota para a página de perfil
@@ -75,9 +75,9 @@ def logout():
 def profile():
     # Verifica se o usuário está autenticado
     if 'user' not in session:
-        return redirect(url_for('login'))
+        return redirect(url_for('login')), 302
 
-    return render_template('home_login.html', user=session.get('user'))
+    return render_template('home_login.html', user=session.get('user')), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
