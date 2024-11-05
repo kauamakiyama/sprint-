@@ -23,24 +23,26 @@ def home():
 def signin():
     return render_template('signin.html') , 200
 
-# Rota para criar um novo usuário
 @app.route('/usuarios', methods=['POST'])
 def create_user():
-    nome = request.form.get('nome')
     usuario = request.form.get('usuario')
     senha = request.form.get('senha')
+    email = request.form.get('email')
 
-    if not nome or not usuario or not senha:
-        return jsonify({"error": "Nome, usuário e senha são obrigatórios"}), 400
+    if not usuario or not senha or not email:
+        return jsonify({"error": "Nome, usuário, senha e email são obrigatórios"}), 400
 
     if mongo.db.usuarios.find_one({"usuario": usuario}):
         return jsonify({"error": "Usuário já existe"}), 409
 
+    if mongo.db.usuarios.find_one({"email": email}):
+        return jsonify({"error": "E-mail já cadastrado"}), 409
+
     hashed_password = hash_password(senha)
-    user_data = {"nome": nome, "usuario": usuario, "senha": hashed_password}
+    user_data = {"usuario": usuario, "senha": hashed_password, "email": email}
     mongo.db.usuarios.insert_one(user_data)
 
-    return redirect(url_for('success')) , 302
+    return redirect(url_for('success')), 302
 
 # Rota de sucesso
 @app.route('/success')
@@ -51,17 +53,16 @@ def success():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        usuario = request.form.get('usuario')
+        email = request.form.get('email')  # Mudamos de 'usuario' para 'email'
         senha = request.form.get('senha')
-
-        user = mongo.db.usuarios.find_one({"usuario": usuario})
+        user = mongo.db.usuarios.find_one({"email": email})  # Buscar pelo e-mail
         if user and verify_password(user['senha'], senha):
-            session['user'] = usuario  # Armazena o usuário na sessão
-            session['username'] = user['nome']
-            return redirect(url_for('profile')) , 302
-        return jsonify({"error": "Usuário ou senha incorretos"}), 401
+            session['user'] = user['usuario']  # Armazena o usuário na sessão
+            return redirect(url_for('profile')), 302
+        return jsonify({"error": "E-mail ou senha incorretos"}), 401
 
     return render_template('login.html'), 200
+
 
 @app.route('/logout')
 def logout():

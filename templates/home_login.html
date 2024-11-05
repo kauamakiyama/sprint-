@@ -10,8 +10,8 @@
     <header class="main-header">
         <h1 class="logo">EZTRAVEL</h1>
 
-        {% if session.get('username') %}
-            <div class="user-greeting">Olá, {{ session['username'] }}!</div>
+        {% if session.get('user') %}
+            <div class="user-greeting">Olá, {{ session['user'] }}!</div>
             <a href="{{ url_for('logout') }}" class="logout-button">Sair</a>
         {% else %}
             <div class="auth-buttons">
