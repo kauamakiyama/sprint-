@@ -40,7 +40,7 @@ def create_user():
     user_data = {"nome": nome, "usuario": usuario, "senha": hashed_password}
     mongo.db.usuarios.insert_one(user_data)
 
-    return redirect(url_for('success')) , 201
+    return redirect(url_for('success')) , 302
 
 # Rota de sucesso
 @app.route('/success')
